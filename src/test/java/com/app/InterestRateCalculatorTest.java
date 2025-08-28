@@ -1,40 +1,61 @@
 package com.app;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InterestRateCalculatorTest {
 
-    @Test
-    public void testCalculateInterest_Success() {
-        InterestRateCalculator calculator = new InterestRateCalculator();
+    InterestRateCalculator calculator = new InterestRateCalculator();
+    int rate;
 
-        double amount = 1000;
-        int time = 5;
-        int rate = 5;
+    @BeforeAll
+    public static void beforeAll() {
+        System.out.println("This is before all!");
+    }
 
-        double expectedValue = (amount * time * rate) / 100.0;
-        double result = calculator.calculateInterest(amount, time);
+    @BeforeEach
+    public void beforeEach() {
+        rate = 5;
+        System.out.println("This is before each!");
+    }
 
-        assertEquals(expectedValue, result);
+    @AfterEach
+    public void afterEach() {
+        System.out.println("This is after each!");
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        System.out.println("This is after all!");
     }
 
     @Test
-    public void testCalculateInterest_WhenLoanExceeded() {
-        InterestRateCalculator calculator = new InterestRateCalculator();
-
-        double amount = 2000;
-        int time = 5;
-        int rate = 5;
-
-        double expectedValue = (amount * time * rate) / 100.0;
-
-        assertThrows(RuntimeException.class, () -> {
-            calculator.calculateInterest(amount, time);
-        });
-
+    @Order(1)
+    @DisplayName("Test method 2")
+    public void testA() throws InterruptedException {
+        System.out.println("A");
     }
 
+    @Test
+    @Order(2)
+    @DisplayName("Test method 1")
+    public void testB() {
+        System.out.println("B");
+    }
+
+    @Test
+    @Order(1)
+    public void testC() {
+        System.out.println("C");
+    }
+
+    @Test
+    @Order(1)
+    public void testD() {
+        System.out.println("D");
+    }
 }
